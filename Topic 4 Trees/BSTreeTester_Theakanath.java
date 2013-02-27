@@ -67,8 +67,6 @@ class BSTree
          lookingat.setRight(insert(lookingat.getRight(), comp));
       else if (comp.compareTo(lookingat.getValue()) < 0) //If object is less, move on left.
          lookingat.setLeft(insert(lookingat.getLeft(), comp));
-      else 
-         ;
       return lookingat;
    }
    
