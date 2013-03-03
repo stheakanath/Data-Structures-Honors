@@ -11,19 +11,23 @@
    without the order and then after makes it ordered, thereby 
    making my program functional and working. It is tested well
    as I have used an array and showed both the before and after
-   effects. 
+   effects. Initally I had some problems, but I fixed the code
+   in order to tmake it work. 
 */
 public class NodeDeletionTester_Theakanath
 {
    public static void main(String[] args) {
-      int[] numbers = {0, 2, 3, -1, 5, 10, 1, 4};
-      BSTree tree = new BSTree(12);
+      String[] numbers = {"D", "H", "C", "A", "F", "E", "G", "B"};
+      BSTree tree = new BSTree("J");
       System.out.println("Previous Order");
       for(int x = 0; x < numbers.length; x++) {
          System.out.print(numbers[x] + " ");
          tree.insert(numbers[x]);
       }
-      System.out.println("\nPrinting in order");
+      System.out.println("\nPrinting in order before insertion");
+      tree.print();
+      tree.removeNode("D");
+      System.out.println("\nPrinting in order after removal of D");
       tree.print();
    }
 }
@@ -67,32 +71,50 @@ class BSTree
          lookingat.setRight(insert(lookingat.getRight(), comp));
       else if (comp.compareTo(lookingat.getValue()) < 0) //If object is less, move on left.
          lookingat.setLeft(insert(lookingat.getLeft(), comp));
-      else 
-         ;
       return lookingat;
    }
    
-   public TreeNode minimum(TreeNode lookingat) {
-      if((Comparable)(lookingat.getLeft().getValue()).compareTo((Comparable)lookingat.getRight().getValue()) > 0)
-         return lookingat.getRight();
-      return lookingat.getLeft();
+   /**
+      Gets the minimum within the node tree you are looking at.
+      If no value then null is returned.
+   */
+   public Comparable minimum(TreeNode lookingat) {
+      if(lookingat != null) {
+         while (lookingat.getLeft() != null)
+            lookingat = lookingat.getLeft();
+         return (Comparable)lookingat.getValue();
+      }
+      return null;
    }
    
+   /**
+      Yay for simple. It removes it based on a value that 
+      you give.
+   */
+   public void removeNode(Comparable comp) {
+      removeNode(root, comp);
+   }
+   
+   /**
+      Handles the removal of a Node. It checks the tree for the minimum
+      value and moves the tree around to fix it. 
+   */
    public TreeNode removeNode(TreeNode lookingat, Comparable comp) {
-      if(lookingat == null)
-         return lookingat;
-      if(comp.compareTo(lookingat.getValue()) > 0) 
-         lookingat.setLeft(removeNode(lookingat.getLeft(), comp));
-      else if(comp.compareTo(lookingat.getValue()) < 0) 
-         lookingat.setRight(removeNode(lookingat.getRight(), comp));
-      else if(lookingat.getRight() != null && lookingat.getLeft() != null) {
-         lookingat.setValue(minimum(lookingat.getRight()).getValue());
-         lookingat.setRight(removeNode(lookingat.getValue(), lookingat.getLeft()));
-      } else {
-          lookingat = ( lookingat.getLeft() != null ) ? lookingat.getLeft() : lookingat.getRight();
+      if(lookingat != null) {
+         if(comp.compareTo(lookingat.getValue()) < 0) 
+            lookingat.setLeft(removeNode(lookingat.getLeft(), comp));
+         else if(comp.compareTo(lookingat.getValue()) > 0) 
+            lookingat.setRight(removeNode(lookingat.getRight(), comp));
+         else if(lookingat.getLeft() == null)
+            lookingat = lookingat.getRight(); 
+         else if(lookingat.getRight() == null)
+            lookingat = lookingat.getLeft();
+         else {
+            lookingat.setValue(minimum(lookingat.getRight()));
+            lookingat.setRight(removeNode(lookingat.getRight(), (Comparable)lookingat.getValue()));  
+         }
       }
       return lookingat;
-      
    }
 
    /**
