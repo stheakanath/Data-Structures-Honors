@@ -1,0 +1,156 @@
+html
+{
+	background: #7F7F7F url("../images/background.png") repeat left top scroll;
+}
+
+#page
+{
+	z-index: 1;
+	width: 960px;
+	min-height: 500px;
+	border-style: none;
+	border-color: transparent;
+	margin-left: auto;
+	margin-right: auto;
+	background: #FFFFFF url("../images/background.png") repeat left top;
+}
+
+#page_position_content
+{
+	margin-bottom: 62px;
+}
+
+#u75
+{
+	z-index: 2;
+	width: 1159px;
+	padding-bottom: 30px;
+	left: -100px;
+}
+
+#u75_align_to_page
+{
+	margin-left: auto;
+	margin-right: auto;
+	width: 959px;
+	left: -100px;
+}
+
+#u76-4
+{
+	z-index: 3;
+	width: 395px;
+	margin-right: -10000px;
+	margin-top: 35px;
+	left: 137px;
+}
+
+#u77-4
+{
+	z-index: 7;
+	width: 43px;
+	min-height: 16px;
+	margin-right: -10000px;
+	margin-top: 40px;
+	left: 736px;
+}
+
+#u77-4:hover
+{
+	padding-top: 0px;
+	padding-bottom: 0px;
+	min-height: 16px;
+	margin: 40px -10000px 0px 0px;
+}
+
+#u82-4
+{
+	z-index: 11;
+	width: 82px;
+	min-height: 16px;
+	margin-right: -10000px;
+	margin-top: 40px;
+	left: 831px;
+}
+
+#u77-4.MuseLinkActive,#u82-4:hover
+{
+	padding-top: 0px;
+	padding-bottom: 0px;
+	min-height: 16px;
+	margin: 40px -10000px 0px 0px;
+}
+
+#u83-4
+{
+	z-index: 15;
+	width: 34px;
+	min-height: 16px;
+	margin-right: -10000px;
+	margin-top: 40px;
+	left: 965px;
+}
+
+#u82-4.MuseLinkActive,#u83-4:hover
+{
+	padding-top: 0px;
+	padding-bottom: 0px;
+	min-height: 16px;
+	margin: 40px -10000px 0px 0px;
+}
+
+#u83-4.MuseLinkActive
+{
+	padding-top: 0px;
+	padding-bottom: 0px;
+	min-height: 16px;
+	margin: 40px -10000px 0px 0px;
+}
+
+#u100-4
+{
+	z-index: 20;
+	width: 417px;
+	min-height: 24px;
+	text-align: center;
+	font-size: 18px;
+	color: #FFFFFF;
+	font-weight: bold;
+	margin-left: 271px;
+	margin-top: 21px;
+	position: relative;
+}
+
+#u103
+{
+	z-index: 24;
+	display: block;
+	vertical-align: top;
+	margin-left: 96px;
+	margin-top: 17px;
+	position: relative;
+}
+
+#u98
+{
+	z-index: 19;
+	width: 526px;
+	min-height: 545px;
+	border-style: none;
+	border-color: transparent;
+	background-color: transparent;
+	margin-left: 217px;
+	margin-top: 24px;
+	position: relative;
+}
+
+#u104
+{
+	z-index: 25;
+	display: block;
+	vertical-align: top;
+	margin-left: 96px;
+	margin-top: 13px;
+	position: relative;
+}
+
