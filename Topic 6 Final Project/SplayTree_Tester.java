@@ -43,6 +43,7 @@ public class SplayTree_Tester {
 class SplayTree {
 	private Node rootNode;
 	private int size;
+	private static Node head = new Node(null);
 	
 	public SplayTree() {
 		rootNode = null;
@@ -50,123 +51,98 @@ class SplayTree {
 	}
 	
 	/**
-		Rotates the SplayTree left on the Node node.
-		
-		@param node Node to be rotated on
-	*/
-	public void rotateLeft( Node node ) {
-		Node rChild = node.getRight();
-		node.setRight(rChild.getLeft());
-		if ( rChild.getLeft() != null )
-			rChild.getLeft().setParent(node);
-		rChild.setParent(node.getParent());
-		if ( node.getParent() == null )
-			rootNode = rChild;
-		else if ( node == node.getParent().getLeft() )
-			node.getParent().setLeft(rChild);
-		else
-			node.getParent().setRight(rChild);
-		rChild.setLeft(node);
-		node.setParent(rChild);
-	}
-	
-	/**
-		Rotates the SplayTree right on the Node node.
-		
-		@param node Node to be rotated on
-	*/
-	public void rotateRight( Node node ) {
-		Node lChild = node.getLeft();
-		node.setLeft(lChild.getRight());
-		
-		if ( lChild.getRight() != null )
-			lChild.getRight().setParent(node);
-		
-		lChild.setParent(node.getParent());
-		
-		if ( node.getParent() == null )
-			rootNode = lChild;
-		else if ( node == node.getParent().getLeft() )
-			node.getParent().setLeft(lChild);
-		else
-			node.getParent().setRight(lChild);
-		
-		lChild.setRight(node);
-		node.setParent(lChild);
-	}
-	
-	/**
 		Makes the Node node the rootNode of the SplayTree.
 		
 		@param node Node to be splayed
 	*/
-	public void splay( Node node ) {
-		while ( node.getParent() != null ) {
-			if ( node.getParent().getParent() == null ) {
-				if ( node.getParent().getLeft() == node )
-					rotateRight(node.getParent());
-				else
-					rotateLeft(node.getParent());
+	public void splay( Comparable comp ) {
+		Node left = head;
+		Node right = head;
+		Node top = rootNode;
+		Node temp;
+		
+		head.setLeft( null );
+		head.setRight( null );
+		
+		while( true ) {
+			if ( comp.compareTo( top.getValue() ) < 0 ) { 
+				if ( top.getLeft() == null ) // exit
+					break;
+				
+				if ( comp.compareTo( top.getLeft().getValue() ) < 0 ) { // Rotate right
+					temp = top.getLeft();
+					top.setLeft( temp.getRight() );
+					temp.setRight( top );
+					top = temp;
+					
+					if ( top.getLeft() == null ) // exit
+						break;
+				}
+				right.setLeft( top ); // Links the right
+				right = top;
+				top = top.getLeft();
 			}
-			else if ( node.getParent().getLeft() == node && node.getParent().getParent().getLeft() == node.getParent() ) {
-				rotateRight(node.getParent().getParent());
-				rotateRight(node.getParent());
+			else if ( comp.compareTo( top.getValue() ) > 0 ) {
+				if ( top.getRight() == null ) // exit
+					break;
+				
+				if ( comp.compareTo( top.getRight().getValue() ) > 0 ) { // Rotate left
+					temp = top.getRight();
+					top.setRight( temp.getLeft() );
+					temp.setLeft( top );
+					top = temp;
+					
+					if ( top.getRight() == null ) // exit
+						break;
+				}
+				left.setRight( top ); // Links the left
+				left = top;
+				top = top.getRight();
 			}
-			else if ( node.getParent().getRight() == node && node.getParent().getParent().getRight() == node.getParent() ) {
-				rotateLeft(node.getParent().getParent());
-				rotateLeft(node.getParent());
-			}
-			else if ( node.getParent().getLeft() == node && node.getParent().getParent().getRight() == node.getParent() ) {
-				rotateRight(node.getParent());
-				rotateLeft(node.getParent());
-			}
-			else {
-				rotateLeft(node.getParent());
-				rotateRight(node.getParent());
-			}
+			else
+				break; // exit
 		}
+		left.setRight( top.getLeft() );
+		right.setLeft( top.getRight() );
+		top.setLeft( head.getRight() );
+		top.setRight( head.getLeft() );
+		rootNode = top;
 	}
 	
 	/**
-		Replaces Node n1 with Node n2.
+		Gets the largest item in the tree.
 		
-		@param n1 Node to be replaced
-		@param n2 Node replacing n1
+		@return Largest item in the tree
 	*/
-	public void replace( Node n1, Node n2 ) {
-		if ( n1 == rootNode )
-			rootNode = n2;
-		else if ( n1 == n1.getParent().getLeft() )
-			n1.getParent().setLeft(n2);
-		else
-			n1.getParent().setRight(n2);
+	public Comparable getMax() {
+		Node node = rootNode;
+		if ( node == null )
+			return null;
 		
-		if ( n2 != null )
-			n2.setParent(n1.getParent());
-	}
-	
-	/**
-		Gets the largest node in the subtree.
-		
-		@param node Root of the subtree
-		@return Largest node in the subtree
-	*/
-	public Node getSubtreeMaximum( Node node ) {
-		while ( node.getRight() != null )
+		while( node.getRight() != null )
 			node = node.getRight();
-		return node;
+		
+		splay( node.getValue() );
+		
+		return node.getValue();
 	}
 	
 	/**
-		Gets the smallest node in the subtree.
+		Gets the smallest item in the tree.
 		
-		@param node Root of the subtree
-		@return Smallest node in the subtree
+		@return Smallest item in the tree
 	*/
-	public Node getSubtreeMinimum( Node node ) {
-		while ( node.getLeft() != null ) 
+	public Comparable getMin() {
+		Node node = rootNode;
+		if ( node == null )
+			return null;
+		
+		while( node.getLeft() != null )
 			node = node.getLeft();
-		return node;
+		
+		splay( node.getValue() );
+		
+		return node.getValue();
 	}
 	
 	/**
@@ -175,49 +151,48 @@ class SplayTree {
 		@param comp Comparable value of new node being added
 	*/
 	public void insert ( Comparable comp ) {
-		if ( find(comp) != null ) // Ensures no duplicate nodes
+		Node node = new Node( comp );
+		if ( rootNode == null && size == 0 ) {
+			rootNode = node;
 			return;
-		Node node = rootNode;
-		Node parent = null;
-		
-		while ( node != null ) {
-			parent = node;
-			if ( node.getValue().compareTo(comp) > 0 )
-				node = node.getRight();
-			else
-				node = node.getLeft();
 		}
 		
-		node = new Node(comp, parent);
+		splay(comp);
 		
-		if ( parent == null )
-			rootNode = node;
-		else if ( parent.getValue().compareTo(node.getValue()) < 0 )
-			parent.setRight(node);
-		else
-			parent.setLeft(node);
+		int temp = comp.compareTo( rootNode.getValue() );
+		if ( temp == 0 ) // Double checks for duplicates
+			return;
 		
-		splay(node);
+		if ( temp < 0 ) {
+			node.setLeft( rootNode.getLeft() );
+			node.setRight( rootNode );
+			rootNode.setLeft( null );
+		}
+		else {
+			node.setRight( rootNode.getRight() );
+			node.setLeft( rootNode );
+			rootNode.setRight( null );
+		}
+		rootNode = node;
 		size++;
 	}
 	
 	/**
-		Finds the node with the value comp.
+		Finds the item with the value comp.
 		
 		@param comp Comparable being searched for
-		@return node of comp if found, null otherwise
+		@return item if found, null otherwise
 	*/
-	public Node find( Comparable comp ) {
-		Node node = rootNode;
-		while ( node != null ) {
-			if ( node.getValue().compareTo(comp) > 0 )
-				node = node.getRight();
-			else if ( node.getValue().compareTo(comp) < 0 )
-				node = node.getLeft();
-			else
-				return node;
-		}
-		return null;
+	public Comparable find( Comparable comp ) {
+		if ( rootNode == null ) // Empty
+			return null;
+		
+		splay( comp );
+		
+		if ( rootNode.getValue().compareTo( comp ) != 0 ) // Not found
+			return null;
+		
+		return rootNode.getValue();
 	}
 	
 	/**
@@ -226,35 +201,21 @@ class SplayTree {
 		@param comp Comparable being removed
 	*/
 	public void remove( Comparable comp ) {
-		Node node = find(comp);
-		if ( node == null )
-			return;
-		else if ( size == 1 ) {
-			rootNode = null;
-			size--;
-			return;
-		}
-		splay(node);
+		splay( comp );
 		
-		if ( node.getLeft() == null )
-			replace(node, node.getRight());
-		else if ( node.getRight() == null )
-			replace(node, node.getLeft());
+		if ( comp.compareTo( rootNode.getValue() ) != 0 ) // Node not found
+			return;
+		
+		if ( rootNode.getLeft() == null ) 
+			rootNode = rootNode.getRight();
 		else {
-			Node tempNode = getSubtreeMinimum(node.getRight());
-			if ( tempNode.getParent() != node ) {
-				replace(tempNode, tempNode.getRight());
-				tempNode.setRight(node.getRight());
-				tempNode.getRight().setParent(tempNode);
-			}
-			replace(node, tempNode);
-			tempNode.setLeft(node.getLeft());
-			tempNode.getLeft().setParent(tempNode);
+			Node node = rootNode.getRight();
+			rootNode = rootNode.getLeft();
+			splay( comp );
+			rootNode.setRight( node );
 		}
 		
 		size--;
-		if ( size == 1 )
-			rootNode = node;
 	}
 	
 	/**
@@ -263,8 +224,6 @@ class SplayTree {
 	public int getSize() { return size; }
 	public boolean isEmpty() { return rootNode == null; }
 	public Node getRoot() { return rootNode; }
-	public Comparable getMinimum() { return getSubtreeMinimum(rootNode).getValue(); }
-	public Comparable getMaximum() { return getSubtreeMaximum(rootNode).getValue(); }
 }
 
 /**
@@ -275,7 +234,6 @@ class Node {
 	private Comparable value;
 	private Node left;
 	private Node right;
-	private Node parent;
 	
 	/**
 		Basic Constructor
@@ -284,20 +242,6 @@ class Node {
 	*/
 	public Node(Comparable initValue) {
 		value = initValue;
-		parent = null;
-		left = null;
-		right = null;
-	}
-	
-	/**
-		Overloaded Constructor method to set parent node.
-		
-		@param initvalue The initial value held in the Node.
-		@param initParent The parent node of this Node.
-	*/
-	public Node(Comparable initValue, Node initParent) {
-		value = initValue;
-		parent = initParent;
 		left = null;
 		right = null;
 	}
@@ -306,13 +250,11 @@ class Node {
 		Overloaded Constructor method for all data.
 		
 		@param initvalue The initial value held in the Node.
-		@param initParent The parent node of this Node.
 		@param initLeft The left child node of this Node.
 		@param initRight The right child node of this Node.
 	*/
-	public Node(Comparable initValue, Node initParent, Node initLeft, Node initRight) {
+	public Node(Comparable initValue, Node initLeft, Node initRight) {
 		value = initValue;
-		parent = initParent;
 		left = initLeft;
 		right = initRight;
 	}
@@ -321,13 +263,11 @@ class Node {
 	public Comparable getValue() { return value; }
 	public Node getLeft() { return left; }
 	public Node getRight() { return right; }
-	public Node getParent() { return parent; }
 	
 	// Basic mutator methods.
 	public void setValue(Comparable theNewValue) { value = theNewValue; }
 	public void setLeft(Node theNewLeft) { left = theNewLeft; }
 	public void setRight(Node theNewRight) { right = theNewRight; }
-	public void setParent(Node theNewParent) { parent = theNewParent; }
 }
 
 /**

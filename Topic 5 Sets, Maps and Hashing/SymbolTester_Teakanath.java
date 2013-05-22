@@ -19,7 +19,7 @@ import java.util.EmptyStackException;
 public class SymbolTester_Teakanath {
    public static void main(String[]args) {
       SymbolTable run = new SymbolTable(); 
-   }
+   }PRIN
 }
 
 /**
